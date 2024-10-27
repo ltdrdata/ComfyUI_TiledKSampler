@@ -84,11 +84,7 @@ def slice_gligen(tile_h, tile_h_len, tile_w, tile_w_len, cond, gligen):
 def slice_cnet(h, h_len, w, w_len, model:comfy.controlnet.ControlBase, img):
     if img is None:
         img = model.cond_hint_original
-    hint = tiling.get_slice(img, h*8, h_len*8, w*8, w_len*8)
-    if isinstance(model, comfy.controlnet.ControlLora):
-        model.cond_hint = hint.float().to(model.device)
-    else:
-        model.cond_hint = hint.to(model.control_model.dtype).to(model.device)
+    model.cond_hint = tiling.get_slice(img, h*8, h_len*8, w*8, w_len*8)
 
 def slices_T2I(h, h_len, w, w_len, model:comfy.controlnet.ControlBase, img):
     model.control_input = None
